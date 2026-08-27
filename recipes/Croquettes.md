@@ -5,7 +5,7 @@ Slug: Croquettes
 Category: Tapas
 Cuisine: Spanish
 Tags: croquettes
-Authors: TBD
+Authors: Katie Button
 Total_Time: 15 minutes
 Servings: 4-6
 

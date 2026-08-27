@@ -5,7 +5,7 @@ Slug: Salad_SmokedFishFava
 Category: Salad
 Cuisine: French
 Tags: sugar
-Authors: TBD
+Authors: Bistronomy
 Total_Time: 45 minutes
 Servings: 4-6
 

@@ -114,6 +114,27 @@ CONSOLIDATED_KEYS = {
     "ChocolateChipCookies": {"Total_Time": "25 minutes"},
 }
 
+# Sources identified after the migration, replacing the `Authors: TBD` placeholder.
+# `Authors` doubles as a source field in this corpus -- it already holds books,
+# restaurants and sites as well as people -- because the format has no Book key
+# and the cookbook is carried only by the slug prefix.
+#
+# Curate is Katie Button's book; the two recipes that already carried `Curate`
+# are renamed so one source has one name.
+AUTHOR_ASSIGNMENTS = {
+    "Croquettes": "Katie Button",
+    "GarlicShrimp": "Katie Button",
+    "RomescoSauce": "Katie Button",            # was Curate
+    "WatermelonCornnutSalad": "Katie Button",  # was Curate
+    "NankingSesameChicken": "House of Nanking",
+    "Salad_SmokedFishFava": "Bistronomy",
+    "SugarSpicedSalmon": "Pacifica Grill",
+    "Tiramisu": "Phil Price",                  # title is "(Phil's) Tiramisu"
+    "Pizookie": "BJ's Restaurant",             # summary: "copycat recipe of BJ's"
+    # No source anywhere in the file. Blank is honest; TBD only looked like data.
+    "MangoGrapefruitSalad": "",
+}
+
 # Misspellings, from vocabulary.json's variant maps.
 CATEGORY_VARIANTS = {"Sauces": "Sauce", "SideS": "Sides"}
 AUTHOR_VARIANTS = {
@@ -252,6 +273,13 @@ def clean(slug: str, text: str) -> tuple[str, list[Change]]:
         if heading and heading.group(1) != canonical:
             text = re.sub(r"^# .*$", f"# {canonical}", text, count=1, flags=re.MULTILINE)
             changes.append(Change(slug, "Heading", heading.group(1), canonical))
+
+    if slug in AUTHOR_ASSIGNMENTS:
+        wanted = AUTHOR_ASSIGNMENTS[slug]
+        current = get_front_matter(text, "Authors")
+        if current != wanted:
+            text = set_front_matter(text, "Authors", wanted)
+            changes.append(Change(slug, "Authors (source)", current or "", wanted or "(blank)"))
 
     authors = get_front_matter(text, "Authors")
     if authors in AUTHOR_VARIANTS:

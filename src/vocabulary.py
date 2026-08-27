@@ -22,6 +22,12 @@ DAMAGE_PATTERNS = [
 
 SLUG_RE = re.compile(r"^[A-Za-z0-9_]+$")
 
+# `Authors` may legitimately be empty -- the format emits every key even when it
+# has no value. What it may not be is a placeholder that looks like a source:
+# 'TBD' rendered as "From TBD" on the page and shipped as a Person named TBD in
+# the structured data, which is worse than saying nothing.
+PLACEHOLDER_AUTHORS = {"TBD", "TODO", "UNKNOWN", "N/A", "XXX"}
+
 
 @dataclass(frozen=True)
 class Vocabulary:
@@ -88,6 +94,17 @@ class Vocabulary:
         """
         out: list[Violation] = []
         for value in values:
+            if value.strip().upper() in PLACEHOLDER_AUTHORS:
+                out.append(
+                    Violation(
+                        file,
+                        "Authors",
+                        value,
+                        f"{value!r} is a placeholder, not a source "
+                        "-- name the source, or leave Authors empty",
+                    )
+                )
+                continue
             if value in self.author_variants:
                 out.append(
                     Violation(

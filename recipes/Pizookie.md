@@ -5,7 +5,7 @@ Slug: Pizookie
 Category: Dessert
 Cuisine: American
 Tags: cookie, ice cream
-Authors: TBD
+Authors: BJ's Restaurant
 Total_Time: 45 minutes
 Servings: 4-6
 

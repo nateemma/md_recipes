@@ -59,6 +59,18 @@ def test_second_author_misspelling_is_caught():
     assert "Pastry Living with Anya" in v.message
 
 
+def test_placeholder_author_is_rejected():
+    """'TBD' rendered as "From TBD" and shipped as a Person named TBD."""
+    (v,) = VOCAB.check_authors("f.md", ["TBD"])
+    assert "placeholder" in v.message
+
+
+def test_blank_authors_is_allowed():
+    """The format emits every key even when empty. Saying nothing is honest;
+    saying 'TBD' is not."""
+    assert VOCAB.check_authors("f.md", []) == []
+
+
 def test_authors_are_an_open_set():
     """No allowlist exists, so a brand-new author must pass (research R4)."""
     assert VOCAB.check_authors("f.md", ["Some New Cookbook Author"]) == []

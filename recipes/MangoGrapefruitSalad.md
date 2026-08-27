@@ -5,7 +5,7 @@ Slug: MangoGrapefruitSalad
 Category: Salad
 Cuisine: Asian
 Tags: asian, coconut, grapefruit, mango, salad, toasted
-Authors: TBD
+Authors: 
 Total_Time: 5 minutes
 Servings: 4-6
 

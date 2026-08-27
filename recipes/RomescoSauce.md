@@ -5,7 +5,7 @@ Slug: RomescoSauce
 Category: Sauce
 Cuisine: Spanish
 Tags: peppers, sauce
-Authors: Curate
+Authors: Katie Button
 Total_Time: 3 minutes
 Servings: 4-6
 

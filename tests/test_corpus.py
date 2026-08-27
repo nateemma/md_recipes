@@ -98,6 +98,21 @@ def test_no_variant_spelling_survives():
     assert not categories & set(VOCAB.category_variants)
 
 
+def test_no_recipe_carries_a_placeholder_author():
+    from src.vocabulary import PLACEHOLDER_AUTHORS
+
+    for path in FILES:
+        for author in parse_file(path).authors:
+            assert author.strip().upper() not in PLACEHOLDER_AUTHORS, path.stem
+
+
+def test_one_source_has_one_name():
+    """Curate is Katie Button's book; both were in use for the same source."""
+    authors = {a for p in FILES for a in parse_file(p).authors}
+    assert "Curate" not in authors
+    assert "Katie Button" in authors
+
+
 def test_tapas_keeps_its_single_recipe():
     """The seven ambiguous small plates all became Appetizer, not Tapas."""
     tapas = [p for p in FILES if parse_file(p).category == "Tapas"]

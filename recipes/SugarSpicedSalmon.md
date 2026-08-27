@@ -5,7 +5,7 @@ Slug: SugarSpicedSalmon
 Category: Dinner
 Cuisine: American
 Tags: salmon, spiced, seafood
-Authors: TBD
+Authors: Pacifica Grill
 Total_Time: 2 hours
 Servings: 8
 

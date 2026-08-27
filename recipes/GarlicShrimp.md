@@ -5,7 +5,7 @@ Slug: GarlicShrimp
 Category: Appetizer
 Cuisine: Spanish
 Tags: garlic, shrimp
-Authors: TBD
+Authors: Katie Button
 Total_Time: 45 minutes
 Servings: 4-6
 

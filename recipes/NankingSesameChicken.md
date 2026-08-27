@@ -5,7 +5,7 @@ Slug: NankingSesameChicken
 Category: Dinner
 Cuisine: American
 Tags: american, chicken, dinner, famous, house, nanking, sesame, world
-Authors: TBD
+Authors: House of Nanking
 Total_Time: 40 minutes
 Servings: 4-6
 

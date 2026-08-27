@@ -5,7 +5,7 @@ Slug: WatermelonCornnutSalad
 Category: Salad
 Cuisine: Spanish
 Tags: cheese, corn nuts, tomato, watermelon
-Authors: Curate
+Authors: Katie Button
 Total_Time: 45 minutes
 Servings: 4-6
 
