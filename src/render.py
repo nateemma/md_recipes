@@ -29,8 +29,9 @@ DOMAIN = "recipes.nateemma.com"
 WELCOME = (
     "These are the recipes we actually cook — family favourites, things worth "
     "making twice, and a few we are still working on. It is not a comprehensive "
-    "index of anything. Search is the only way around: narrow by cuisine or "
-    "course, or just type an ingredient you have in the fridge."
+    "index of anything. Search is the only way around: narrow by cuisine, course "
+    "or time, or type an ingredient you have in the fridge, a dish you half "
+    "remember, or whoever it came from."
 )
 
 

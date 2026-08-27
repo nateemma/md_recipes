@@ -11,7 +11,7 @@
   <div class="search-row">
     <label class="field field-query">
       <span>Search</span>
-      <input type="search" id="q" name="q" placeholder="anchovies, short ribs, crème fraîche…"
+      <input type="search" id="q" name="q" placeholder="anchovies, short ribs, Ottolenghi…"
              autocomplete="off" spellcheck="false">
     </label>
   </div>
@@ -50,6 +50,7 @@
   <li class="result">
     <a href="/{{ r.slug }}">
       <span class="result-title">{{ r.title }}</span>
+      {% if r.authors %}<span class="result-author">{{ r.authors | join(', ') }}</span>{% endif %}
       <span class="result-meta">
         <span class="pill">{{ r.cuisine }}</span>
         <span class="pill">{{ r.category }}</span>

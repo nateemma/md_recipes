@@ -12,7 +12,10 @@
   --muted: #6b7280;
   --rule: #e5e7eb;
   --radius: 8px;
-  --measure: 46rem;
+  /* From the original theme: a 1200px container, with the recipe itself held to
+     800px because prose does not want to be read at full width. */
+  --container: 1200px;
+  --measure: 800px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -37,7 +40,7 @@ a { color: var(--primary); }
 }
 
 .site-header nav {
-  max-width: var(--measure);
+  max-width: var(--container);
   margin: 0 auto;
   padding: .75rem 1rem;
   display: flex;
@@ -55,13 +58,13 @@ a { color: var(--primary); }
 .nav-search { text-decoration: none; font-size: .9rem; }
 
 .container {
-  max-width: var(--measure);
+  max-width: var(--container);
   margin: 0 auto;
   padding: 0 1rem 3rem;
 }
 
 .site-footer {
-  max-width: var(--measure);
+  max-width: var(--container);
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
   color: var(--muted);
@@ -72,6 +75,8 @@ a { color: var(--primary); }
 /* ---------- recipe ---------- */
 
 .recipe {
+  max-width: var(--measure);
+  margin: 0 auto;
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, .06);
@@ -112,9 +117,10 @@ a { color: var(--primary); }
   background: var(--bg);
   border: 1px solid var(--rule);
   border-radius: 999px;
-  padding: .1rem .6rem;
+  padding: .1rem .55rem;
   margin-right: .35rem;
-  font-size: .78rem;
+  font-size: .75rem;
+  white-space: nowrap;
   color: var(--muted);
 }
 
@@ -155,24 +161,31 @@ a { color: var(--primary); }
 
 /* ---------- search ---------- */
 
+.welcome {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
 .welcome h1 {
-  margin: 0 0 .5rem;
-  color: var(--secondary);
-  font-size: 1.75rem;
+  margin: 0 0 .75rem;
+  color: var(--primary);
+  font-size: 2.5rem;
+  line-height: 1.15;
 }
 
 .welcome p {
-  margin: 0 0 1.5rem;
+  margin: 0 auto;
   color: var(--muted);
-  max-width: 40rem;
+  max-width: 44rem;
 }
 
 .search {
+  max-width: var(--measure);
+  margin: 0 auto 1.25rem;
   background: var(--card);
   border-radius: var(--radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .06);
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+  padding: 1.5rem;
 }
 
 .search-row { display: flex; flex-wrap: wrap; gap: .75rem; }
@@ -211,38 +224,70 @@ a { color: var(--primary); }
 
 .clear:hover { color: var(--text); border-color: var(--muted); }
 
-.result-count { color: var(--muted); font-size: .85rem; margin: 0 0 .75rem; }
+.result-count {
+  color: var(--muted);
+  font-size: .85rem;
+  margin: 0 0 1rem;
+  text-align: center;
+}
 
-.results { list-style: none; margin: 0; padding: 0; }
-
-.result + .result { margin-top: .4rem; }
+/* The original theme's card grid. It uses the full container width, and a long
+   title wraps inside its own card instead of pushing the tags onto a new line. */
+.results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.25rem;
+}
 
 .result a {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: .5rem;
+  flex-direction: column;
+  gap: .6rem;
+  height: 100%;
   background: var(--card);
-  border-radius: 6px;
-  padding: .7rem .9rem;
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
   text-decoration: none;
   color: var(--text);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+  transition: transform .2s, box-shadow .2s;
 }
 
-.result a:hover { box-shadow: 0 2px 6px rgba(74, 144, 226, .25); }
+.result a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, .12);
+}
 
-.result-title { font-weight: 500; }
-.result-meta { display: flex; align-items: baseline; gap: .35rem; }
-.result-meta .time { font-size: .78rem; color: var(--muted); }
+.result-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--primary);
+  /* Wrap the title, however long, rather than squeezing the meta row. */
+  overflow-wrap: anywhere;
+}
+
+.result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .35rem;
+  margin-top: auto;
+}
+
+.result-meta .time { font-size: .75rem; color: var(--muted); white-space: nowrap; }
+.result-author { font-size: .8rem; color: var(--muted); }
 
 .no-matches { color: var(--muted); padding: 1.5rem 0; }
 
 @media (max-width: 40rem) {
   .recipe { padding: 1.25rem; }
   .recipe-header h1 { font-size: 1.5rem; }
-  .result a { flex-direction: column; }
+  .welcome h1 { font-size: 1.85rem; }
+  .results { grid-template-columns: 1fr; gap: .75rem; }
 }
 
 /* ---------- print ----------

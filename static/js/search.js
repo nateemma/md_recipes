@@ -41,11 +41,14 @@
     return w;
   }
 
-  /* Search covers the title and the ingredient lines (FR-015). Instructions and
-   * notes are deliberately out: they would roughly triple the index for matches
-   * a reader looking for "what can I cook with anchovies" does not want. */
+  /* Search covers the title, the author and the ingredient lines. Instructions
+   * and notes are deliberately out: they would roughly triple the index for
+   * matches a reader looking for "what can I cook with anchovies" does not want.
+   * The author is in because this corpus records the source there -- people,
+   * books, restaurants and sites alike -- so "Ottolenghi" and "Bobby Flay" are
+   * questions the search should answer. */
   function haystack(r) {
-    var parts = [r.title];
+    var parts = [r.title].concat(r.authors || []);
     (r.ingredients || []).forEach(function (g) {
       parts = parts.concat(g.items || []);
     });
@@ -88,6 +91,10 @@
         html +=
           '<li class="result"><a href="' + r.url + '">' +
           '<span class="result-title">' + escapeHtml(r.title) + "</span>" +
+          (r.authors && r.authors.length
+            ? '<span class="result-author">' +
+              escapeHtml(r.authors.join(", ")) + "</span>"
+            : "") +
           '<span class="result-meta">' +
           '<span class="pill">' + escapeHtml(r.cuisine) + "</span>" +
           '<span class="pill">' + escapeHtml(r.category) + "</span>" +

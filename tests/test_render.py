@@ -138,3 +138,31 @@ def test_parse_report_written(site):
     report = (site / "parse-report.md").read_text(encoding="utf-8")
     assert "component labels" in report
     assert "prose lines" in report
+
+
+def test_search_card_shows_the_author(site):
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert 'class="result-author"' in html
+    assert "Bobby Flay" in html
+
+
+def test_search_script_matches_against_the_author():
+    """`Authors` records the source in this corpus -- people, books, restaurants
+    and sites alike -- so "Ottolenghi" is a question search should answer."""
+    js = (ROOT / "static" / "js" / "search.js").read_text(encoding="utf-8")
+    assert "concat(r.authors" in js
+
+
+def test_layout_uses_the_full_container_width():
+    css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
+    assert "--container: 1200px" in css
+    assert "max-width: var(--container)" in css
+
+
+def test_results_are_a_card_grid_so_long_titles_wrap():
+    """A long title must wrap inside its own card rather than pushing the
+    cuisine/course tags onto another line."""
+    css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
+    grid = css[css.index(".results {") :]
+    assert "grid-template-columns" in grid
+    assert "overflow-wrap: anywhere" in css
