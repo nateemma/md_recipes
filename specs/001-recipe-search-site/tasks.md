@@ -158,7 +158,7 @@ and answer a whole-corpus question from it with no other file.
 - [X] T057 [US3] Implement `totalTime` emission in `src/jsonld.py`: ISO 8601 only when the parse is definite; omit for ranges and `overnight` rather than guessing or failing (FR-012)
 - [X] T058 [US3] Embed the JSON-LD as `<script type="application/ld+json">` in `templates/recipe.html`, escaped so a title containing `<` or `&` cannot break out of the script element
 - [X] T059 [P] [US3] Write `tests/test_jsonld.py`: every page's JSON-LD parses; required Recipe fields present; a grouped recipe flattens every ingredient line exactly once with no group name leaking in; a range-timed recipe omits `totalTime` and is still valid
-- [ ] T060 [US3] Submit three built pages to Google's Rich Results test — one grouped (`tk_WalnutSoup`), one flat (`BakedRice`), one without `totalTime` — and confirm zero errors (SC-002)
+- [X] T060 [US3] Submit three built pages to Google's Rich Results test — one grouped (`tk_WalnutSoup`), one flat (`BakedRice`), one without `totalTime` — and confirm zero errors (SC-002)
 
 **Checkpoint**: The corpus is legible to crawlers and agents.
 
@@ -175,10 +175,10 @@ file and watch the deployment refuse to publish.
 - [X] T062 [US5] Write `build/.nojekyll` from `src/build.py`, so Pages serves the output as-is
 - [X] T063 [US5] Write `.github/workflows/deploy.yml`: on push to the default branch — checkout, set up Python 3.12, install `requirements.txt`, run `python -m src.build --strict`, `actions/upload-pages-artifact`, `actions/deploy-pages`, with `pages: write` and `id-token: write` permissions and a `pages` concurrency group
 - [X] T064 [US5] Add a `pytest` step to `.github/workflows/deploy.yml` before the build, so a parser regression blocks the deploy as surely as a validation failure does
-- [ ] T065 [US5] Create the public GitHub repository and push, then confirm the first Actions run completes and the artifact deploys (SC-008)
-- [ ] T066 [US5] Verify a failing push does not publish: push a file with an out-of-vocabulary category on a branch, confirm the workflow fails at the build step and the live site is unchanged (FR-036)
-- [ ] T067 [US5] Hand the user the two manual, one-time steps that cannot be done from the repository: the `CNAME` DNS record for `recipes.nateemma.com` → `<username>.github.io`, and entering the domain in Settings → Pages with Enforce HTTPS on
-- [ ] T068 [US5] Confirm `https://recipes.nateemma.com` loads over HTTPS with a valid certificate, and that the old S3 site is still running and untouched (SC-009, FR-039)
+- [X] T065 [US5] Create the public GitHub repository and push, then confirm the first Actions run completes and the artifact deploys (SC-008)
+- [X] T066 [US5] Verify a failing push does not publish: push a file with an out-of-vocabulary category on a branch, confirm the workflow fails at the build step and the live site is unchanged (FR-036)
+- [X] T067 [US5] Hand the user the two manual, one-time steps that cannot be done from the repository: the `CNAME` DNS record for `recipes.nateemma.com` → `<username>.github.io`, and entering the domain in Settings → Pages with Enforce HTTPS on
+- [X] T068 [US5] Confirm `https://recipes.nateemma.com` loads over HTTPS with a valid certificate, and that the old S3 site is still running and untouched (SC-009, FR-039)
 
 **Checkpoint**: The site is live and self-publishing.
 
