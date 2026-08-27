@@ -74,17 +74,17 @@ are unchanged.
 **⚠️ Ordering note**: This phase precedes the rendering stories because every one of them consumes
 the corpus, and a build over the dirty corpus fails validation by design.
 
-- [ ] T018 [US4] Write `tools/migrate_corpus.py` with a `--dry-run` flag that prints every proposed change and writes nothing, per the Migration record table in data-model.md
-- [ ] T019 [US4] Implement the copy step in `tools/migrate_corpus.py`: 211 files from `~/Documents/website/recipes-new/content/recipes/` to `recipes/`, preserving bytes exactly
-- [ ] T020 [US4] Implement the category corrections in `tools/migrate_corpus.py`: the 27 `ToTry` assignments (6 `Soup`, 11 `Dinner`, 3 `Sides`, 7 `Appetizer`, never `Tapas`), 2 `Sauces`→`Sauce`, 1 `SideS`→`Sides`, and the two files whose category holds a cuisine name
-- [ ] T021 [US4] Implement the author corrections in `tools/migrate_corpus.py`: `Ottolenghi`→`Yotam Ottolenghi` (2 files) and `Pastrey Living with Anya`→`Pastry Living with Anya` (1 file, found in research.md R4 and absent from the feature prompt)
-- [ ] T022 [US4] Implement the encoding repair in `tools/migrate_corpus.py`: `text.encode('cp1252').decode('utf-8')` over the damaged runs in `BasqueCheesecake.md`, `SpaghettiPuttanesca.md` and `tk_WalnutSoup.md`, printing each before/after pair, and leaving the other four OCR errors in `tk_WalnutSoup.md` untouched
-- [ ] T023 [US4] Implement the trailing-newline fix in `tools/migrate_corpus.py`: every file ends with exactly one `\n` (18 files affected)
-- [ ] T024 [US4] Run `python tools/migrate_corpus.py --dry-run`, present the full change table for confirmation, then run it for real and commit `recipes/` so every correction is a reviewable diff (FR-025, SC-011)
-- [ ] T025 [US4] Implement validation in `src/build.py`: run every rule from data-model.md over all 211 files, accumulate `Violation`s, print them sorted by file to stderr, and exit `1` writing no output when any exist (FR-030, FR-031, contracts/build-cli.md)
-- [ ] T026 [P] [US4] Write `tests/test_corpus.py`: over all 211 files — every slug equals its filename, every `# ` heading equals its `Title`, every category/cuisine/author validates, no `Â`/`â€`/`U+FFFD`, every file ends in exactly one newline, distinct categories is 15 and cuisines is 13
-- [ ] T027 [P] [US4] Write `tests/test_build.py` corpus-integrity case: hash every file in `recipes/`, run a build, re-hash, assert equality (Principle I, SC-007)
-- [ ] T028 [P] [US4] Add a test asserting `src/build.py` does not import `src/emitter.py`, making the "the build never writes markdown" rule mechanically enforced rather than merely intended
+- [X] T018 [US4] Write `tools/migrate_corpus.py` with a `--dry-run` flag that prints every proposed change and writes nothing, per the Migration record table in data-model.md
+- [X] T019 [US4] Implement the copy step in `tools/migrate_corpus.py`: 211 files from `~/Documents/website/recipes-new/content/recipes/` to `recipes/`, preserving bytes exactly
+- [X] T020 [US4] Implement the category corrections in `tools/migrate_corpus.py`: the 27 `ToTry` assignments (6 `Soup`, 11 `Dinner`, 3 `Sides`, 7 `Appetizer`, never `Tapas`), 2 `Sauces`→`Sauce`, 1 `SideS`→`Sides`, and the two files whose category holds a cuisine name
+- [X] T021 [US4] Implement the author corrections in `tools/migrate_corpus.py`: `Ottolenghi`→`Yotam Ottolenghi` (2 files) and `Pastrey Living with Anya`→`Pastry Living with Anya` (1 file, found in research.md R4 and absent from the feature prompt)
+- [X] T022 [US4] Implement the encoding repair in `tools/migrate_corpus.py`: `text.encode('cp1252').decode('utf-8')` over the damaged runs in `BasqueCheesecake.md`, `SpaghettiPuttanesca.md` and `tk_WalnutSoup.md`, printing each before/after pair, and leaving the other four OCR errors in `tk_WalnutSoup.md` untouched
+- [X] T023 [US4] Implement the trailing-newline fix in `tools/migrate_corpus.py`: every file ends with exactly one `\n` (18 files affected)
+- [X] T024 [US4] Run `python tools/migrate_corpus.py --dry-run`, present the full change table for confirmation, then run it for real and commit `recipes/` so every correction is a reviewable diff (FR-025, SC-011)
+- [X] T025 [US4] Implement validation in `src/build.py`: run every rule from data-model.md over all 211 files, accumulate `Violation`s, print them sorted by file to stderr, and exit `1` writing no output when any exist (FR-030, FR-031, contracts/build-cli.md)
+- [X] T026 [P] [US4] Write `tests/test_corpus.py`: over all 211 files — every slug equals its filename, every `# ` heading equals its `Title`, every category/cuisine/author validates, no `Â`/`â€`/`U+FFFD`, every file ends in exactly one newline, distinct categories is 15 and cuisines is 13
+- [X] T027 [P] [US4] Write `tests/test_build.py` corpus-integrity case: hash every file in `recipes/`, run a build, re-hash, assert equality (Principle I, SC-007)
+- [X] T028 [P] [US4] Add a test asserting `src/build.py` does not import `src/emitter.py`, making the "the build never writes markdown" rule mechanically enforced rather than merely intended
 
 **Checkpoint**: The corpus is clean and committed; the build validates it and refuses anything dirty.
 

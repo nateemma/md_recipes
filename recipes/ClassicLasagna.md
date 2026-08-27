@@ -1,4 +1,4 @@
-Title: Extra Cheesy Classic Homemade Lasagna.
+Title: Extra Cheesy Classic Homemade Lasagna
 Summary: Basic lasagne recipe
 Date: 2025-03-22 15:30
 Slug: ClassicLasagna

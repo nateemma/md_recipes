@@ -1,4 +1,4 @@
-Title: Goat Cheese Queso Fundido with Roasted Green Chile Sauce
+Title: Goat Cheese Queso Fundido with Roasted Green Chile Sauce and Blue Corn Tortilla Chips
 Summary: Southwestern cheese dip
 Date: 2025-09-15 10:00
 Slug: bf_QuesoFundido

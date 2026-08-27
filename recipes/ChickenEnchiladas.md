@@ -9,7 +9,7 @@ Authors: Lori Price
 Total_Time: 60 minutes
 Servings: 8-10
 
-# Chicken Enchiladas
+# Lori's Chicken Enchiladas
 
 ## Ingredients
 

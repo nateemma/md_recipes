@@ -72,6 +72,42 @@ MISSING_CATEGORIES = {
     "bf_YucatanChickenWraps": "Dinner",      # Category: Mexican, Cuisine: Southwestern
 }
 
+# Five recipes whose '# ' heading disagrees with their Title field. The grammar
+# contract requires the two to be byte-identical, so one of them is wrong in each
+# case -- but neither field wins uniformly, so these were confirmed individually
+# rather than resolved by a rule. The value here is the agreed canonical title,
+# written to BOTH the Title field and the heading.
+CANONICAL_TITLES = {
+    # Title kept: the family's name for it, and what the slug reflects.
+    "ChickenEnchiladas": "Lori's Chicken Enchiladas",
+    "FancyCrabCakes": "Fancy Crab Cakes",
+    # Heading kept: the Title carried a stray full stop.
+    "ClassicLasagna": "Extra Cheesy Classic Homemade Lasagna",
+    # Heading kept: it is the more informative of the two.
+    "Toum": "Toum (Whipped Garlic Sauce)",
+    "bf_QuesoFundido": (
+        "Goat Cheese Queso Fundido with Roasted Green Chile Sauce "
+        "and Blue Corn Tortilla Chips"
+    ),
+}
+
+# One slug that disagrees with its filename in case only.
+SLUG_FIXES = {"Toum": "Toum"}
+
+# Two files that are blank scaffolds rather than recipes -- Title "XXXX" and
+# "Recipe Name", placeholder ingredients, Authors: TBD. The old site published
+# both. They move to docs/ instead, where a starting point is actually useful.
+TEMPLATE_FILES = {"a_template_recipe", "template_recipe"}
+
+# One file whose front matter carries keys the format does not define. The
+# grammar has exactly one time key, `Total_Time`, so Prep_Time and Cook_Time are
+# not misspellings of valid keys -- they are fields that do not exist here.
+# Folding them into the correct key keeps the information: prep 15 + cook 10 = 25,
+# where the recorded Total_Time of 15 minutes had simply duplicated the prep time.
+CONSOLIDATED_KEYS = {
+    "ChocolateChipCookies": {"Total_Time": "25 minutes"},
+}
+
 # Misspellings, from vocabulary.json's variant maps.
 CATEGORY_VARIANTS = {"Sauces": "Sauce", "SideS": "Sides"}
 AUTHOR_VARIANTS = {
@@ -119,6 +155,64 @@ def get_front_matter(text: str, key: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
+FRONT_MATTER_KEYS = [
+    "Title", "Summary", "Date", "Slug", "Category",
+    "Cuisine", "Tags", "Authors", "Total_Time", "Servings",
+]
+
+
+def rewrite_front_matter(slug: str, text: str) -> tuple[str, list[Change]]:
+    """Re-emit the front matter in the contract's key order.
+
+    Also drops keys the format does not define and restores the trailing space on
+    an empty value -- `Tags: ` not `Tags:` -- which is what round-trip equality is
+    measured against.
+    """
+    changes: list[Change] = []
+    lines = text.split("\n")
+    end = next((i for i, l in enumerate(lines) if l == ""), len(lines))
+
+    values: dict[str, str] = {}
+    unknown: list[str] = []
+    original_order: list[str] = []
+    for line in lines[:end]:
+        key, sep, value = line.partition(":")
+        if not sep:
+            continue
+        original_order.append(key)
+        if key in FRONT_MATTER_KEYS:
+            values[key] = value.strip()
+        else:
+            unknown.append(key)
+
+    overrides = CONSOLIDATED_KEYS.get(slug, {})
+    for key, value in overrides.items():
+        if values.get(key) != value:
+            changes.append(Change(slug, "Total_Time", values.get(key, ""), value))
+            values[key] = value
+
+    for key in unknown:
+        changes.append(Change(slug, "Key removed", key, "<not in the format>"))
+
+    known_order = [k for k in original_order if k in FRONT_MATTER_KEYS]
+    if known_order != [k for k in FRONT_MATTER_KEYS if k in values]:
+        changes.append(
+            Change(slug, "Key order", ", ".join(known_order[:4]) + ", ...", "contract order")
+        )
+
+    rebuilt = []
+    for key in FRONT_MATTER_KEYS:
+        value = values.get(key, "")
+        rebuilt.append(f"{key}: {value}" if value else f"{key}: ")
+
+    # Restoring a trailing space is a change worth reporting, but not one worth
+    # naming per key -- report it once per file.
+    if rebuilt != lines[:end] and not changes:
+        changes.append(Change(slug, "Front matter", "<trailing space>", "restored"))
+
+    return "\n".join(rebuilt + lines[end:]), changes
+
+
 def clean(slug: str, text: str) -> tuple[str, list[Change]]:
     changes: list[Change] = []
 
@@ -136,11 +230,31 @@ def clean(slug: str, text: str) -> tuple[str, list[Change]]:
         text = set_front_matter(text, "Category", new)
         changes.append(Change(slug, "Category (variant)", category, new))
 
+    if slug in SLUG_FIXES:
+        current = get_front_matter(text, "Slug")
+        if current != SLUG_FIXES[slug]:
+            text = set_front_matter(text, "Slug", SLUG_FIXES[slug])
+            changes.append(Change(slug, "Slug", current or "", SLUG_FIXES[slug]))
+
+    if slug in CANONICAL_TITLES:
+        canonical = CANONICAL_TITLES[slug]
+        title = get_front_matter(text, "Title")
+        if title != canonical:
+            text = set_front_matter(text, "Title", canonical)
+            changes.append(Change(slug, "Title", title or "", canonical))
+        heading = re.search(r"^# (.*)$", text, re.MULTILINE)
+        if heading and heading.group(1) != canonical:
+            text = re.sub(r"^# .*$", f"# {canonical}", text, count=1, flags=re.MULTILINE)
+            changes.append(Change(slug, "Heading", heading.group(1), canonical))
+
     authors = get_front_matter(text, "Authors")
     if authors in AUTHOR_VARIANTS:
         new = AUTHOR_VARIANTS[authors]
         text = set_front_matter(text, "Authors", new)
         changes.append(Change(slug, "Authors", authors, new))
+
+    text, fm_changes = rewrite_front_matter(slug, text)
+    changes.extend(fm_changes)
 
     text, repairs = repair_mojibake(text)
     for before, after in repairs:
@@ -170,12 +284,18 @@ def main() -> int:
         return 1
 
     files = sorted(args.source.glob("*.md"))
-    print(f"{len(files)} recipes in {args.source}")
+    templates = [f for f in files if f.stem in TEMPLATE_FILES]
+    files = [f for f in files if f.stem not in TEMPLATE_FILES]
+    print(f"{len(files)} recipes in {args.source} ({len(templates)} templates set aside)")
 
     all_changes: list[Change] = []
     touched: set[str] = set()
+    docs = args.dest.parent / "docs"
     if not args.dry_run:
         args.dest.mkdir(parents=True, exist_ok=True)
+        docs.mkdir(parents=True, exist_ok=True)
+        for t in templates:
+            shutil.copy2(t, docs / t.name)
 
     for path in files:
         slug = path.stem
@@ -197,6 +317,11 @@ def main() -> int:
         print(f"{kind} ({len(group)})")
         for c in group:
             print(c)
+        print()
+
+    for t in templates:
+        print(f"  {t.stem:<34} {'Moved':<18} 'recipes/' -> 'docs/'")
+    if templates:
         print()
 
     print(f"{len(all_changes)} corrections across {len(touched)} of {len(files)} files")

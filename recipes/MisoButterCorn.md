@@ -1,5 +1,5 @@
 Title: Miso butter corn
-Summary:
+Summary: 
 Date: 2025-03-22 15:30
 Slug: MisoButterCorn
 Category: Appetizer

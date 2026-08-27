@@ -162,6 +162,47 @@ def check_encoding(file: str, text: str) -> list[Violation]:
     return out
 
 
+def check_front_matter_keys(file: str, text: str, expected: list[str]) -> list[Violation]:
+    """The front matter has exact keys in an exact order (Principle II).
+
+    A key the format does not define is rejected rather than ignored: the format
+    belongs to RecipeScanner, whose emitter would silently drop such a key on any
+    round-trip, so tolerating it here would let the corpus grow a second format
+    that only one of the two projects can read.
+    """
+    out: list[Violation] = []
+    found: list[str] = []
+    for line in text.split("\n"):
+        if line == "":
+            break
+        key, sep, _ = line.partition(":")
+        if not sep:
+            continue
+        found.append(key)
+        if key not in expected:
+            out.append(
+                Violation(
+                    file,
+                    "Front matter",
+                    key,
+                    f"{key!r} is not a key in this format "
+                    f"(the format defines exactly: {', '.join(expected)})",
+                )
+            )
+
+    known = [k for k in found if k in expected]
+    if known != [k for k in expected if k in known]:
+        out.append(
+            Violation(
+                file,
+                "Front matter",
+                ", ".join(known),
+                "keys are not in the order the format defines",
+            )
+        )
+    return out
+
+
 def check_trailing_newline(file: str, text: str) -> list[Violation]:
     if not text.endswith("\n"):
         return [

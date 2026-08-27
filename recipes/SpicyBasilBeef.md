@@ -6,7 +6,7 @@ Category: Dinner
 Cuisine: Asian
 Tags: thai, basil, beef, peppers
 Authors: Jet Tila
-Total_Time:20 minutes
+Total_Time: 20 minutes
 Servings: 4-6
 
 # Spicy Basil Beef (Pad Krapow)

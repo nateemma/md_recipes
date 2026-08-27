@@ -1,15 +1,13 @@
 Title: Chocolate Chip Cookies
-Date: 2025-03-20 10:00
-Tags: american, chip, chocolate, cookies, dessert
-Slug: ChocolateChipCookies
-Authors: Claude Sonnet, by Anthropic
 Summary: Classic chocolate chip cookies with a crisp edge and soft center
-Prep_Time: 15 minutes
-Cook_Time: 10 minutes
-Total_Time: 15 minutes
-Servings: 4-6
+Date: 2025-03-20 10:00
+Slug: ChocolateChipCookies
 Category: Dessert
 Cuisine: American
+Tags: american, chip, chocolate, cookies, dessert
+Authors: Claude Sonnet, by Anthropic
+Total_Time: 25 minutes
+Servings: 4-6
 
 # Chocolate Chip Cookies
 

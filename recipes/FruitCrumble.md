@@ -1,5 +1,5 @@
 Title: Lori's Fruit Crumble
-Summary:
+Summary: 
 Date: 2025-03-22 15:30
 Slug: FruitCrumble
 Category: Dessert

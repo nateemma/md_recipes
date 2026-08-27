@@ -9,7 +9,7 @@ Authors: Le Bec Fin
 Total_Time: 45 minutes
 Servings: 4-6
 
-# Crab Gallette
+# Fancy Crab Cakes
 
 A signature dish (Galettes de Crabe) from *Le Bec Fin* in Philadelphia
 

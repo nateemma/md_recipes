@@ -1,5 +1,5 @@
 Title: Grilled Ham with Jack Daniel's Mop
-Summary:
+Summary: 
 Date: 2025-03-22 15:30
 Slug: GrilledHam
 Category: Dinner

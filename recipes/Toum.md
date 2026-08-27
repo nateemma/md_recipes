@@ -1,7 +1,7 @@
-Title: Toum
+Title: Toum (Whipped Garlic Sauce)
 Summary: Whipped garlic sauce for Mediterranean foods
 Date: 2025-09-04 16:00
-Slug: toum
+Slug: Toum
 Category: Sauce
 Cuisine: Mediterranean
 Tags: garlic, lemon

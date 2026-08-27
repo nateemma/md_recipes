@@ -1,5 +1,5 @@
 Title: Chicken Adobo (Filipino-Style Braised Chicken)
-Summary:
+Summary: 
 Date: 2025-03-22 15:30
 Slug: ChickenAdobo
 Category: Dinner
