@@ -290,6 +290,26 @@ a { color: var(--primary); }
   .results { grid-template-columns: 1fr; gap: .75rem; }
 }
 
+/* ---------- orientation ----------
+   In landscape there is width to spare either side, so the recipe keeps its
+   800px column -- that is a comfortable measure for prose and the reason the
+   original theme used it.
+
+   In portrait, on a tablet or a phone held upright, that same column leaves a
+   lot of the screen unused for no reading benefit, so the recipe takes nearly
+   all of it. The container's padding is what stops it going edge to edge.
+
+   `orientation: portrait` is height >= width, which is exactly the
+   width-vs-height distinction rather than a guess at a device size: an iPad at
+   1024px wide gets the wide treatment in portrait and the narrow one in
+   landscape, from the same stylesheet. */
+
+@media (orientation: portrait) {
+  .recipe {
+    max-width: none;
+  }
+}
+
 /* ---------- print ----------
    Printing is the browser's own command against this stylesheet, not a
    JavaScript-rebuilt popup: it works with scripts disabled and is a fraction of

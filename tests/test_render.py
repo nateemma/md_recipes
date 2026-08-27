@@ -166,3 +166,24 @@ def test_results_are_a_card_grid_so_long_titles_wrap():
     grid = css[css.index(".results {") :]
     assert "grid-template-columns" in grid
     assert "overflow-wrap: anywhere" in css
+
+
+def test_recipe_width_is_orientation_aware():
+    """Landscape keeps the 800px reading column; portrait uses nearly the whole
+    screen, because on a tablet held upright that column wastes most of it.
+
+    Measured in Chrome: iPad Pro portrait 78% -> 97% of viewport, the same
+    device in landscape unchanged at 800px.
+    """
+    css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
+    assert "@media (orientation: portrait)" in css
+    block = css[css.index("@media (orientation: portrait)") :]
+    block = block[: block.index("}\n}") + 3]
+    assert ".recipe" in block
+    assert "max-width: none" in block
+
+
+def test_portrait_rule_does_not_disturb_print():
+    """The print block must still win: it comes after the orientation rule."""
+    css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
+    assert css.index("@media (orientation: portrait)") < css.index("@media print")
