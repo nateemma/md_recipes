@@ -1,0 +1,140 @@
+"""Recipe pages: structure, groups, print, and Unicode fidelity."""
+
+import json
+import re
+
+import pytest
+
+from src import build
+
+from .conftest import ROOT
+
+
+@pytest.fixture(scope="module")
+def site(tmp_path_factory):
+    out = tmp_path_factory.mktemp("site")
+    assert build.main(["--out", str(out)]) == build.EXIT_OK
+    return out
+
+
+def page(site, slug):
+    return (site / slug / "index.html").read_text(encoding="utf-8")
+
+
+def test_one_page_per_recipe(site):
+    recipes, _ = build.load_corpus()
+    pages = [p for p in site.iterdir() if p.is_dir() and p.name != "static"]
+    assert len(pages) == len(recipes)
+    for r in recipes:
+        assert (site / r.slug / "index.html").exists()
+
+
+def test_clean_urls_have_no_extension(site):
+    """GitHub Pages serves index.html for a directory (FR-038)."""
+    assert (site / "BalsamicDressing" / "index.html").exists()
+    assert not (site / "BalsamicDressing.html").exists()
+
+
+def test_grouped_ingredients_render_as_headings(site):
+    html = page(site, "tk_WalnutSoup")
+    section = html[html.index('class="ingredients"') : html.index('class="instructions"')]
+    for label in ["Walnut Cream", "Pear Puree", "Poaching Liquid"]:
+        assert f"<h3>{label}</h3>" in section
+
+
+def test_instruction_numbering_restarts_within_each_group(site):
+    html = page(site, "tk_WalnutSoup")
+    section = html[html.index('class="instructions"') :]
+    groups = re.findall(r"<h3>(.*?)</h3>\s*<ol>(.*?)</ol>", section, re.S)
+    assert len(groups) >= 2
+    for _, body in groups:
+        # Each group opens a fresh <ol>, so the browser numbers it from 1.
+        assert "<li>" in body
+
+
+def test_ungrouped_recipe_has_no_empty_group_heading(site):
+    html = page(site, "BalsamicDressing")
+    section = html[html.index('class="ingredients"') : html.index('class="instructions"')]
+    assert "<h3>" not in section
+
+
+def test_recipe_without_notes_renders_no_notes_heading(site):
+    """54 of the corpus have no Notes section."""
+    html = page(site, "ApricotUpsideDownCake")
+    assert "<h2>Notes</h2>" not in html
+
+
+def test_recipe_with_notes_renders_them(site):
+    assert "<h2>Notes</h2>" in page(site, "AnchoHoneySalmon")
+
+
+def test_ordered_notes_survive_to_the_page(site):
+    """BasqueCheesecake numbers its notes; the reference rule dropped all nine."""
+    html = page(site, "BasqueCheesecake")
+    notes = html[html.index('class="notes"') :]
+    assert notes.count("<li>") >= 9
+
+
+def test_headnote_and_italic_attribution_survive(site):
+    html = page(site, "bf_WhiteGazpacho")
+    assert 'class="headnote"' in html
+    assert "<em>" in html[html.index('class="headnote"') : html.index("</article>")]
+
+
+def test_prose_line_is_a_paragraph_not_a_heading(site):
+    """The correction that matters most on the page."""
+    html = page(site, "bf_WhiteGazpacho")
+    assert "Add the bread" in html
+    assert "<h3>Add the bread" not in html
+    assert 'class="note-line"' in html
+
+
+@pytest.mark.parametrize(
+    "slug,needle",
+    [
+        ("bf_WhiteGazpacho", "¾"),
+        ("tk_WalnutSoup", "½"),
+        ("bf_CornPancakesSalmon", "Crème Fraîche"),
+    ],
+)
+def test_unicode_survives_to_the_page(site, slug, needle):
+    assert needle in page(site, slug)
+
+
+def test_no_encoding_damage_anywhere_in_the_output(site):
+    for path in site.rglob("*.html"):
+        text = path.read_text(encoding="utf-8")
+        for bad in ("Â½", "â€", "�"):
+            assert bad not in text, f"{path.name} contains {bad!r}"
+
+
+def test_print_stylesheet_hides_site_chrome():
+    css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
+    block = css[css.index("@media print") :]
+    for selector in [".site-header", ".site-footer", ".search"]:
+        assert selector in block
+
+
+def test_title_is_html_escaped_not_raw(site):
+    """A title with '&' must not break the document."""
+    recipes, _ = build.load_corpus()
+    amp = [r for r in recipes if "&" in r.title]
+    if amp:
+        html = page(site, amp[0].slug)
+        assert "&amp;" in html
+
+
+def test_static_assets_copied(site):
+    assert (site / "static" / "css" / "site.css").exists()
+    assert (site / "static" / "js" / "search.js").exists()
+
+
+def test_cname_and_nojekyll_written(site):
+    assert (site / "CNAME").read_text(encoding="utf-8").strip() == "recipes.nateemma.com"
+    assert (site / ".nojekyll").exists()
+
+
+def test_parse_report_written(site):
+    report = (site / "parse-report.md").read_text(encoding="utf-8")
+    assert "component labels" in report
+    assert "prose lines" in report

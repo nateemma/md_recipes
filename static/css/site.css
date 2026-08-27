@@ -1,0 +1,282 @@
+/* Price Family Recipes.
+   The palette and type carry over from the previous site deliberately -- the
+   family already knows what these recipes look like, and a change of generator
+   is not a reason to change the look. */
+
+:root {
+  --primary: #4a90e2;
+  --secondary: #2c3e50;
+  --bg: #f8f9fa;
+  --card: #ffffff;
+  --text: #333333;
+  --muted: #6b7280;
+  --rule: #e5e7eb;
+  --radius: 8px;
+  --measure: 46rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+a { color: var(--primary); }
+
+/* ---------- shell ---------- */
+
+.site-header {
+  background: var(--card);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+  margin-bottom: 2rem;
+}
+
+.site-header nav {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: .75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.site-name {
+  font-weight: 600;
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.nav-search { text-decoration: none; font-size: .9rem; }
+
+.container {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+.site-footer {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  color: var(--muted);
+  font-size: .85rem;
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------- recipe ---------- */
+
+.recipe {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .06);
+  padding: 2rem;
+}
+
+.recipe-header h1 {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 1.9rem;
+  line-height: 1.25;
+}
+
+.recipe-summary {
+  margin: .5rem 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.recipe-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.75rem;
+  margin: 1.25rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--rule);
+  font-size: .9rem;
+}
+
+.recipe-meta div { display: flex; gap: .4rem; }
+.recipe-meta dt { color: var(--muted); margin: 0; }
+.recipe-meta dd { margin: 0; font-weight: 500; }
+
+.recipe-tags { margin: .75rem 0 0; }
+
+.tag, .pill {
+  display: inline-block;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: .1rem .6rem;
+  margin-right: .35rem;
+  font-size: .78rem;
+  color: var(--muted);
+}
+
+.headnote {
+  margin: 1.5rem 0 0;
+  color: #4b5563;
+}
+
+.headnote p:first-child { margin-top: 0; }
+
+.recipe section { margin-top: 2rem; }
+
+.recipe h2 {
+  color: var(--primary);
+  font-size: 1.25rem;
+  margin: 0 0 .75rem;
+  padding-bottom: .35rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.recipe h3 {
+  font-size: 1rem;
+  color: var(--secondary);
+  margin: 1.25rem 0 .4rem;
+}
+
+.group:first-of-type h3 { margin-top: .25rem; }
+
+.recipe ul, .recipe ol { padding-left: 1.5rem; margin: .4rem 0; }
+.recipe li { margin-bottom: .35rem; }
+
+/* A line that is neither a list item nor a component label -- usually OCR
+   line-wrapping. Set as prose, never as a heading. */
+.note-line {
+  margin: .5rem 0 .5rem 1.5rem;
+  color: #4b5563;
+}
+
+/* ---------- search ---------- */
+
+.welcome h1 {
+  margin: 0 0 .5rem;
+  color: var(--secondary);
+  font-size: 1.75rem;
+}
+
+.welcome p {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  max-width: 40rem;
+}
+
+.search {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .06);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.search-row { display: flex; flex-wrap: wrap; gap: .75rem; }
+.search-row + .search-row { margin-top: .75rem; }
+
+.field { display: flex; flex-direction: column; gap: .25rem; flex: 1 1 9rem; }
+.field-query { flex: 1 1 100%; }
+
+.field span { font-size: .78rem; color: var(--muted); }
+
+.field input, .field select {
+  font: inherit;
+  padding: .5rem .65rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--text);
+  width: 100%;
+}
+
+.field input:focus, .field select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -1px;
+}
+
+.clear {
+  align-self: flex-end;
+  font: inherit;
+  padding: .5rem .9rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.clear:hover { color: var(--text); border-color: var(--muted); }
+
+.result-count { color: var(--muted); font-size: .85rem; margin: 0 0 .75rem; }
+
+.results { list-style: none; margin: 0; padding: 0; }
+
+.result + .result { margin-top: .4rem; }
+
+.result a {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .5rem;
+  background: var(--card);
+  border-radius: 6px;
+  padding: .7rem .9rem;
+  text-decoration: none;
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.result a:hover { box-shadow: 0 2px 6px rgba(74, 144, 226, .25); }
+
+.result-title { font-weight: 500; }
+.result-meta { display: flex; align-items: baseline; gap: .35rem; }
+.result-meta .time { font-size: .78rem; color: var(--muted); }
+
+.no-matches { color: var(--muted); padding: 1.5rem 0; }
+
+@media (max-width: 40rem) {
+  .recipe { padding: 1.25rem; }
+  .recipe-header h1 { font-size: 1.5rem; }
+  .result a { flex-direction: column; }
+}
+
+/* ---------- print ----------
+   Printing is the browser's own command against this stylesheet, not a
+   JavaScript-rebuilt popup: it works with scripts disabled and is a fraction of
+   the code. */
+
+@media print {
+  :root { --measure: 100%; }
+
+  .site-header,
+  .site-footer,
+  .search,
+  .result-count,
+  .no-matches,
+  .nav-search { display: none !important; }
+
+  body { background: #fff; font-size: 11pt; line-height: 1.45; }
+
+  .container { max-width: none; padding: 0; }
+
+  .recipe {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .recipe h2 { color: #000; border-bottom: 1px solid #999; }
+  .recipe h3 { color: #000; }
+  .recipe-header h1 { color: #000; font-size: 18pt; }
+
+  /* Keep a component and its list on one page where possible. */
+  .group, .recipe section { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+
+  a { color: #000; text-decoration: none; }
+}

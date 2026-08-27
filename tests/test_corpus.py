@@ -18,7 +18,7 @@ from .conftest import RECIPES, ROOT
 FILES = sorted(RECIPES.glob("*.md"))
 VOCAB = Vocabulary.load(ROOT / "data" / "vocabulary.json")
 
-EXPECTED_COUNT = 209  # 211 source files, less two blank templates moved to docs/
+EXPECTED_COUNT = 208  # 211 source files: 2 blank templates to docs/, 1 empty stub dropped
 EXPECTED_CATEGORIES = 15
 EXPECTED_CUISINES = 13
 

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title }} &middot; {{ site_name }}{% endblock %}
+
+{% block meta %}
+{%- if recipe.summary %}
+<meta name="description" content="{{ recipe.summary }}">
+{%- endif %}
+<script type="application/ld+json">{{ jsonld }}</script>
+{% endblock %}
+
+{% block content %}
+<article class="recipe">
+  <header class="recipe-header">
+    <h1>{{ recipe.title }}</h1>
+    {%- if recipe.summary %}
+    <p class="recipe-summary">{{ recipe.summary }}</p>
+    {%- endif %}
+
+    <dl class="recipe-meta">
+      <div><dt>Category</dt><dd>{{ recipe.category }}</dd></div>
+      <div><dt>Cuisine</dt><dd>{{ recipe.cuisine }}</dd></div>
+      {%- if recipe.servings %}
+      <div><dt>Serves</dt><dd>{{ recipe.servings }}</dd></div>
+      {%- endif %}
+      {%- if recipe.total_time_raw %}
+      <div><dt>Time</dt><dd>{{ recipe.total_time_raw }}</dd></div>
+      {%- endif %}
+      {%- if recipe.authors %}
+      <div><dt>From</dt><dd>{{ recipe.authors | join(', ') }}</dd></div>
+      {%- endif %}
+    </dl>
+
+    {%- if recipe.tags %}
+    <p class="recipe-tags">
+      {%- for tag in recipe.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </p>
+    {%- endif %}
+  </header>
+
+  {%- if headnote %}
+  <div class="headnote">{{ headnote }}</div>
+  {%- endif %}
+
+  <section class="ingredients">
+    <h2>Ingredients</h2>
+    {%- for group in recipe.ingredients %}
+    {%- if group.items or group.prose %}
+    <div class="group">
+      {%- if group.label %}<h3>{{ group.label }}</h3>{% endif %}
+      {{ render_group(group, ordered=False) }}
+    </div>
+    {%- endif %}
+    {%- endfor %}
+  </section>
+
+  <section class="instructions">
+    <h2>Instructions</h2>
+    {%- for group in recipe.instructions %}
+    {%- if group.items or group.prose %}
+    <div class="group">
+      {%- if group.label %}<h3>{{ group.label }}</h3>{% endif %}
+      {{ render_group(group, ordered=True) }}
+    </div>
+    {%- endif %}
+    {%- endfor %}
+  </section>
+
+  {%- if recipe.has_notes %}
+  <section class="notes">
+    <h2>Notes</h2>
+    {%- for group in recipe.notes %}
+    {%- if group.items or group.prose %}
+    <div class="group">
+      {%- if group.label %}<h3>{{ group.label }}</h3>{% endif %}
+      {{ render_group(group, ordered=group.ordered) }}
+    </div>
+    {%- endif %}
+    {%- endfor %}
+  </section>
+  {%- endif %}
+</article>
+{% endblock %}

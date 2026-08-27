@@ -99,6 +99,12 @@ SLUG_FIXES = {"Toum": "Toum"}
 # both. They move to docs/ instead, where a starting point is actually useful.
 TEMPLATE_FILES = {"a_template_recipe", "template_recipe"}
 
+# A failed export: empty Title, a slug that is only the cookbook prefix, and a
+# body of empty placeholders ('- ', '1. '). The recipe it was meant to be already
+# exists complete as yo_ButternutSquashSoup.md, with the same tags and author.
+# Nothing is lost by dropping it.
+DISCARDED_FILES = {"yo_"}
+
 # One file whose front matter carries keys the format does not define. The
 # grammar has exactly one time key, `Total_Time`, so Prep_Time and Cook_Time are
 # not misspellings of valid keys -- they are fields that do not exist here.
@@ -285,8 +291,15 @@ def main() -> int:
 
     files = sorted(args.source.glob("*.md"))
     templates = [f for f in files if f.stem in TEMPLATE_FILES]
-    files = [f for f in files if f.stem not in TEMPLATE_FILES]
-    print(f"{len(files)} recipes in {args.source} ({len(templates)} templates set aside)")
+    discarded = [f for f in files if f.stem in DISCARDED_FILES]
+    files = [
+        f for f in files
+        if f.stem not in TEMPLATE_FILES and f.stem not in DISCARDED_FILES
+    ]
+    print(
+        f"{len(files)} recipes in {args.source} "
+        f"({len(templates)} templates set aside, {len(discarded)} empty stub dropped)"
+    )
 
     all_changes: list[Change] = []
     touched: set[str] = set()
@@ -321,7 +334,9 @@ def main() -> int:
 
     for t in templates:
         print(f"  {t.stem:<34} {'Moved':<18} 'recipes/' -> 'docs/'")
-    if templates:
+    for d in discarded:
+        print(f"  {d.stem:<34} {'Dropped':<18} 'empty export stub'")
+    if templates or discarded:
         print()
 
     print(f"{len(all_changes)} corrections across {len(touched)} of {len(files)} files")

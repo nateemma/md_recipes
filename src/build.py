@@ -18,6 +18,7 @@ from .vocabulary import (
     Vocabulary,
     check_encoding,
     check_front_matter_keys,
+    check_not_empty,
     check_slug,
     check_title_heading,
     check_trailing_newline,
@@ -59,6 +60,11 @@ def load_corpus(corpus: Path = CORPUS) -> tuple[list[Recipe], list[Violation]]:
             violations.append(Violation(rel, "Parse", "", str(exc)))
             continue
 
+        violations.extend(
+            check_not_empty(
+                rel, recipe.title, recipe.ingredient_lines(), recipe.instruction_lines()
+            )
+        )
         violations.extend(check_slug(rel, recipe.slug, path.stem))
         violations.extend(check_title_heading(rel, recipe.title, recipe.heading_text))
         violations.extend(vocab.check_category(rel, recipe.category))

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ site_name }}{% endblock %}</title>
+{% block meta %}{% endblock %}
+<link rel="stylesheet" href="/static/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <nav>
+    <a class="site-name" href="/">{{ site_name }}</a>
+    <a class="nav-search" href="/">Search</a>
+  </nav>
+</header>
+
+<main class="container">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <p>{{ site_name }} &middot; {{ recipe_count }} recipes we actually cook</p>
+</footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>

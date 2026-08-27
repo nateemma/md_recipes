@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ site_name }}{% endblock %}
+
+{% block content %}
+<section class="welcome">
+  <h1>{{ site_name }}</h1>
+  <p>{{ welcome }}</p>
+</section>
+
+<form class="search" id="search" role="search" onsubmit="return false;">
+  <div class="search-row">
+    <label class="field field-query">
+      <span>Search</span>
+      <input type="search" id="q" name="q" placeholder="anchovies, short ribs, crème fraîche…"
+             autocomplete="off" spellcheck="false">
+    </label>
+  </div>
+  <div class="search-row filters">
+    <label class="field">
+      <span>Cuisine</span>
+      <select id="cuisine" name="cuisine">
+        <option value="">Any cuisine</option>
+        {% for c in cuisines %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="field">
+      <span>Course</span>
+      <select id="category" name="category">
+        <option value="">Any course</option>
+        {% for c in categories %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="field">
+      <span>Time</span>
+      <select id="time" name="time">
+        <option value="">Any time</option>
+        <option value="30">Under 30 minutes</option>
+        <option value="60">Under an hour</option>
+        <option value="120">Under two hours</option>
+      </select>
+    </label>
+    <button type="button" id="clear" class="clear">Clear</button>
+  </div>
+</form>
+
+<p class="result-count" id="count" aria-live="polite">{{ recipe_count }} recipes</p>
+
+<ul class="results" id="results">
+  {% for r in recipes %}
+  <li class="result">
+    <a href="/{{ r.slug }}">
+      <span class="result-title">{{ r.title }}</span>
+      <span class="result-meta">
+        <span class="pill">{{ r.cuisine }}</span>
+        <span class="pill">{{ r.category }}</span>
+        {% if r.total_time_raw %}<span class="time">{{ r.total_time_raw }}</span>{% endif %}
+      </span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+
+<p class="no-matches" id="no-matches" hidden>
+  Nothing matches that. Try a different ingredient, or clear the filters.
+</p>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/search.js" defer></script>
+{% endblock %}

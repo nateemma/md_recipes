@@ -137,6 +137,24 @@ def check_title_heading(file: str, title: str, heading: str | None) -> list[Viol
     return []
 
 
+def check_not_empty(file: str, title: str, ingredients: list[str],
+                    instructions: list[str]) -> list[Violation]:
+    """A recipe must actually be one.
+
+    A failed export -- empty Title, empty '- ' and '1. ' placeholders -- would
+    otherwise publish as a blank page, and in a site whose only navigation is
+    search it would surface in results as a recipe with no name.
+    """
+    out: list[Violation] = []
+    if not title.strip():
+        out.append(Violation(file, "Title", "", "Title is empty"))
+    if not [i for i in ingredients if i.strip()]:
+        out.append(Violation(file, "Ingredients", "", "no non-empty ingredient lines"))
+    if not [i for i in instructions if i.strip()]:
+        out.append(Violation(file, "Instructions", "", "no non-empty instruction lines"))
+    return out
+
+
 def check_encoding(file: str, text: str) -> list[Violation]:
     """Damaged text is a validation failure, not a warning.
 

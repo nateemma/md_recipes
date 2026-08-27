@@ -98,17 +98,17 @@ the corpus, and a build over the dirty corpus fails validation by design.
 grouped instructions and notes all render, and it prints cleanly — with no search page and no index
 file present.
 
-- [ ] T029 [US1] Write `templates/base.html`: page shell, header, footer, `<meta charset>`, and the block structure the other templates extend
-- [ ] T030 [US1] Write `templates/recipe.html`: title, summary, meta row (category, cuisine, author, servings, total time), headnote, ingredient groups with component headings, instruction groups with numbering restarting per group, notes only when present (FR-008, FR-009)
-- [ ] T031 [US1] Render prose lines within a group as paragraphs in `templates/recipe.html`, in source order relative to the group's items, never as headings (data-model.md → `ProseLine`)
-- [ ] T032 [US1] Write `static/css/site.css` carrying forward the existing palette — `#4a90e2`, `#2c3e50`, `#f8f9fa`, system font stack, white card with soft shadow — with a responsive layout (research.md R14)
-- [ ] T033 [US1] Add the `@media print` block to `static/css/site.css`: hide header, nav, footer and search controls; drop the card shadow and padding; keep the recipe legible on paper (FR-010)
-- [ ] T034 [US1] Implement `src/render.py`: set up the Jinja environment with autoescaping, render each `Recipe` through `templates/recipe.html`, and write to `build/<Slug>/index.html` for clean URLs (FR-038, research.md R10)
-- [ ] T035 [US1] Wire the read → validate → parse → render → write pipeline in `src/build.py` with `--out`, `--strict` and `--no-report` flags and the exit codes in contracts/build-cli.md
-- [ ] T036 [US1] Implement `src/report.py` writing `build/parse-report.md`: every bare line classified as label or prose, grouped by file, so all 521 decisions are auditable in one artifact (Principle VI, research.md R3)
-- [ ] T037 [P] [US1] Add rendering cases to `tests/test_build.py`: 211 pages exist; a grouped recipe (`tk_WalnutSoup`) keeps its components in both sections; a recipe without notes (`ApricotUpsideDownCake`) renders no empty Notes heading; a headnote with an italic attribution (`bf_WhiteGazpacho`) survives
-- [ ] T038 [P] [US1] Add a Unicode fidelity test asserting `¾`, `1 1⁄2` (U+2044), `crème fraîche`, `jalapeño` and `°` appear correctly in built pages (FR-005, SC-001)
-- [ ] T039 [US1] Run the manual checks in quickstart.md §6 — serve `build/`, open three recipes, and confirm the browser print preview shows recipe content only
+- [X] T029 [US1] Write `templates/base.html`: page shell, header, footer, `<meta charset>`, and the block structure the other templates extend
+- [X] T030 [US1] Write `templates/recipe.html`: title, summary, meta row (category, cuisine, author, servings, total time), headnote, ingredient groups with component headings, instruction groups with numbering restarting per group, notes only when present (FR-008, FR-009)
+- [X] T031 [US1] Render prose lines within a group as paragraphs in `templates/recipe.html`, in source order relative to the group's items, never as headings (data-model.md → `ProseLine`)
+- [X] T032 [US1] Write `static/css/site.css` carrying forward the existing palette — `#4a90e2`, `#2c3e50`, `#f8f9fa`, system font stack, white card with soft shadow — with a responsive layout (research.md R14)
+- [X] T033 [US1] Add the `@media print` block to `static/css/site.css`: hide header, nav, footer and search controls; drop the card shadow and padding; keep the recipe legible on paper (FR-010)
+- [X] T034 [US1] Implement `src/render.py`: set up the Jinja environment with autoescaping, render each `Recipe` through `templates/recipe.html`, and write to `build/<Slug>/index.html` for clean URLs (FR-038, research.md R10)
+- [X] T035 [US1] Wire the read → validate → parse → render → write pipeline in `src/build.py` with `--out`, `--strict` and `--no-report` flags and the exit codes in contracts/build-cli.md
+- [X] T036 [US1] Implement `src/report.py` writing `build/parse-report.md`: every bare line classified as label or prose, grouped by file, so all 521 decisions are auditable in one artifact (Principle VI, research.md R3)
+- [X] T037 [P] [US1] Add rendering cases to `tests/test_build.py`: 211 pages exist; a grouped recipe (`tk_WalnutSoup`) keeps its components in both sections; a recipe without notes (`ApricotUpsideDownCake`) renders no empty Notes heading; a headnote with an italic attribution (`bf_WhiteGazpacho`) survives
+- [X] T038 [P] [US1] Add a Unicode fidelity test asserting `¾`, `1 1⁄2` (U+2044), `crème fraîche`, `jalapeño` and `°` appear correctly in built pages (FR-005, SC-001)
+- [X] T039 [US1] Run the manual checks in quickstart.md §6 — serve `build/`, open three recipes, and confirm the browser print preview shows recipe content only
 
 **Checkpoint**: A complete, shippable cookbook. MVP reached.
 
@@ -125,20 +125,20 @@ that exists.
 **Note**: `recipes.json` is built here rather than in User Story 3 because search depends on it and
 this story is the higher priority. US3 then holds it to its public contract.
 
-- [ ] T040 [US2] Implement `src/index.py`: `Recipe[]` → `build/recipes.json` per contracts/recipes-json.md — the envelope (`generated`, `count`, `categories`, `cuisines`), the per-recipe fields, the grouped ingredient form, and `time_min`/`time_max` (FR-022)
-- [ ] T041 [US2] Exclude instructions, notes, headnote and prose lines from the index, per the "Deliberately excluded" section of contracts/recipes-json.md
-- [ ] T042 [US2] Write `templates/search.html`: the welcome line establishing these are recipes the family likes rather than a comprehensive index, the cuisine/category/time controls, the query input, a result count, and a results container (FR-014, FR-019)
-- [ ] T043 [US2] Render the full corpus into `templates/search.html` results before any query is entered, so the home page is useful on arrival (FR-014)
-- [ ] T044 [US2] Implement `static/js/search.js`: fetch `recipes.json`, precompute accent-folded lowercase match keys once at load, and filter on input — no dependencies, no build step (FR-018, research.md R8)
-- [ ] T045 [US2] Implement combining filters in `static/js/search.js`: cuisine AND category AND free text AND time all narrow together (FR-017)
-- [ ] T046 [US2] Implement free-text matching over title and ingredient lines in `static/js/search.js`, case-insensitive and accent-folded via `normalize('NFD')` with combining marks stripped, so `creme fraiche` finds `crème fraîche` (FR-015, FR-021)
-- [ ] T047 [US2] Implement the "under an hour" filter in `static/js/search.js` testing `time_max <= 60`, excluding recipes with no parsed time rather than treating them as zero (FR-016)
-- [ ] T048 [US2] Implement the result count and the explicit no-matches message in `static/js/search.js` (FR-019)
-- [ ] T049 [US2] Implement URL state in `static/js/search.js`: read `?q=&cuisine=&category=&time=` on load, `replaceState` while typing, `pushState` on a discrete filter change, and ignore unrecognised values by falling back to the unfiltered corpus (FR-040, research.md R9)
-- [ ] T050 [US2] Render each result as a link to `/<Slug>` in `static/js/search.js`, showing enough — title, cuisine, category, time — to choose between results (FR-020)
-- [ ] T051 [US2] Copy `static/` into `build/static/` in `src/build.py`, and write the search page to `build/index.html` as the site root
-- [ ] T052 [P] [US2] Write `tests/test_index.py`: 211 entries, every FR-022 field present, grouped ingredients retained, no `Â`/`â€`/`U+FFFD` anywhere (FR-024), and every `slug` has a corresponding built page
-- [ ] T053 [US2] Run the manual search matrix in quickstart.md §7, including the offline check and the shared-URL check (SC-003, SC-013)
+- [X] T040 [US2] Implement `src/index.py`: `Recipe[]` → `build/recipes.json` per contracts/recipes-json.md — the envelope (`generated`, `count`, `categories`, `cuisines`), the per-recipe fields, the grouped ingredient form, and `time_min`/`time_max` (FR-022)
+- [X] T041 [US2] Exclude instructions, notes, headnote and prose lines from the index, per the "Deliberately excluded" section of contracts/recipes-json.md
+- [X] T042 [US2] Write `templates/search.html`: the welcome line establishing these are recipes the family likes rather than a comprehensive index, the cuisine/category/time controls, the query input, a result count, and a results container (FR-014, FR-019)
+- [X] T043 [US2] Render the full corpus into `templates/search.html` results before any query is entered, so the home page is useful on arrival (FR-014)
+- [X] T044 [US2] Implement `static/js/search.js`: fetch `recipes.json`, precompute accent-folded lowercase match keys once at load, and filter on input — no dependencies, no build step (FR-018, research.md R8)
+- [X] T045 [US2] Implement combining filters in `static/js/search.js`: cuisine AND category AND free text AND time all narrow together (FR-017)
+- [X] T046 [US2] Implement free-text matching over title and ingredient lines in `static/js/search.js`, case-insensitive and accent-folded via `normalize('NFD')` with combining marks stripped, so `creme fraiche` finds `crème fraîche` (FR-015, FR-021)
+- [X] T047 [US2] Implement the "under an hour" filter in `static/js/search.js` testing `time_max <= 60`, excluding recipes with no parsed time rather than treating them as zero (FR-016)
+- [X] T048 [US2] Implement the result count and the explicit no-matches message in `static/js/search.js` (FR-019)
+- [X] T049 [US2] Implement URL state in `static/js/search.js`: read `?q=&cuisine=&category=&time=` on load, `replaceState` while typing, `pushState` on a discrete filter change, and ignore unrecognised values by falling back to the unfiltered corpus (FR-040, research.md R9)
+- [X] T050 [US2] Render each result as a link to `/<Slug>` in `static/js/search.js`, showing enough — title, cuisine, category, time — to choose between results (FR-020)
+- [X] T051 [US2] Copy `static/` into `build/static/` in `src/build.py`, and write the search page to `build/index.html` as the site root
+- [X] T052 [P] [US2] Write `tests/test_index.py`: 211 entries, every FR-022 field present, grouped ingredients retained, no `Â`/`â€`/`U+FFFD` anywhere (FR-024), and every `slug` has a corresponding built page
+- [X] T053 [US2] Run the manual search matrix in quickstart.md §7, including the offline check and the shared-URL check (SC-003, SC-013)
 
 **Checkpoint**: The site is complete and usable end to end, locally.
 
@@ -152,12 +152,12 @@ whole-corpus questions.
 **Independent Test**: Feed built pages to a structured-data validator; fetch `recipes.json` alone
 and answer a whole-corpus question from it with no other file.
 
-- [ ] T054 [US3] Implement `src/jsonld.py`: `Recipe` → `schema.org/Recipe` dict per contracts/recipe-jsonld.md, covering name, description, datePublished, recipeCategory, recipeCuisine, keywords, author, recipeYield and url
-- [ ] T055 [US3] Implement flat `recipeIngredient` in `src/jsonld.py`: every ingredient line once, source order, group names dropped, prose lines excluded (FR-013, settled in spec Clarifications)
-- [ ] T056 [US3] Implement `recipeInstructions` in `src/jsonld.py`: `HowToSection` containing `HowToStep` when a recipe has named instruction groups, a flat `HowToStep[]` otherwise
-- [ ] T057 [US3] Implement `totalTime` emission in `src/jsonld.py`: ISO 8601 only when the parse is definite; omit for ranges and `overnight` rather than guessing or failing (FR-012)
-- [ ] T058 [US3] Embed the JSON-LD as `<script type="application/ld+json">` in `templates/recipe.html`, escaped so a title containing `<` or `&` cannot break out of the script element
-- [ ] T059 [P] [US3] Write `tests/test_jsonld.py`: every page's JSON-LD parses; required Recipe fields present; a grouped recipe flattens every ingredient line exactly once with no group name leaking in; a range-timed recipe omits `totalTime` and is still valid
+- [X] T054 [US3] Implement `src/jsonld.py`: `Recipe` → `schema.org/Recipe` dict per contracts/recipe-jsonld.md, covering name, description, datePublished, recipeCategory, recipeCuisine, keywords, author, recipeYield and url
+- [X] T055 [US3] Implement flat `recipeIngredient` in `src/jsonld.py`: every ingredient line once, source order, group names dropped, prose lines excluded (FR-013, settled in spec Clarifications)
+- [X] T056 [US3] Implement `recipeInstructions` in `src/jsonld.py`: `HowToSection` containing `HowToStep` when a recipe has named instruction groups, a flat `HowToStep[]` otherwise
+- [X] T057 [US3] Implement `totalTime` emission in `src/jsonld.py`: ISO 8601 only when the parse is definite; omit for ranges and `overnight` rather than guessing or failing (FR-012)
+- [X] T058 [US3] Embed the JSON-LD as `<script type="application/ld+json">` in `templates/recipe.html`, escaped so a title containing `<` or `&` cannot break out of the script element
+- [X] T059 [P] [US3] Write `tests/test_jsonld.py`: every page's JSON-LD parses; required Recipe fields present; a grouped recipe flattens every ingredient line exactly once with no group name leaking in; a range-timed recipe omits `totalTime` and is still valid
 - [ ] T060 [US3] Submit three built pages to Google's Rich Results test — one grouped (`tk_WalnutSoup`), one flat (`BakedRice`), one without `totalTime` — and confirm zero errors (SC-002)
 
 **Checkpoint**: The corpus is legible to crawlers and agents.
