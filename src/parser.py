@@ -28,6 +28,14 @@ ORDERED_ITEM = re.compile(r"(\d+)\.\s+(.*)")
 
 # Classification of a bare line (research R3).
 MAX_LABEL_LENGTH = 60
+# How many following non-blank lines may sit between a label and its list. Two,
+# because a component label is sometimes followed by a yield note before the
+# list starts -- 'Tangerine Sauce' then 'Makes about 1 cup' then the bullets.
+LABEL_LOOKAHEAD = 2
+# A bare line starting with a quantity is an ingredient that lost its '- ',
+# never a component name. Without this, '1 cup all-purpose flour' in
+# bf_BacalaoCrepes becomes a heading.
+STARTS_WITH_QUANTITY = re.compile(r"^[\d¼½¾⅓⅔⅛⅜⅝⅞]")
 
 
 class ParseError(Exception):
@@ -63,11 +71,13 @@ def classify_bare_line(line: str, following: list[str]) -> str:
     if core.endswith(":"):
         return LABEL
 
+    if STARTS_WITH_QUANTITY.match(stripped):
+        return PROSE
+
     # The structural test: a real label introduces a list.
-    next_content = next((x for x in following if x.strip()), None)
+    upcoming = [x for x in following if x.strip()][:LABEL_LOOKAHEAD]
     if (
-        next_content is not None
-        and _is_list_item(next_content)
+        any(_is_list_item(x) for x in upcoming)
         and len(stripped) <= MAX_LABEL_LENGTH
         and not core.endswith(".")
     ):

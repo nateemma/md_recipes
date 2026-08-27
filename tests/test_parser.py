@@ -170,6 +170,21 @@ def test_line_not_followed_by_a_list_item_is_prose():
     assert classify_bare_line("MEAT", ["", "some prose"]) == PROSE
 
 
+def test_label_found_across_an_intervening_yield_note():
+    """'Tangerine Sauce' / 'Makes about 1 cup' / the bullets.
+
+    A component label is sometimes separated from its list by a yield note, so
+    the structural test looks two non-blank lines ahead, not one.
+    """
+    assert classify_bare_line("Tangerine Sauce", ["", "Makes about 1 cup", "", "- 4 tangerines"]) == LABEL
+
+
+def test_a_line_starting_with_a_quantity_is_never_a_label():
+    """An ingredient that lost its '- ' must not become a heading."""
+    assert classify_bare_line("1 cup all-purpose flour", ["", "- 2 eggs"]) == PROSE
+    assert classify_bare_line("½ cup sugar", ["", "- 2 eggs"]) == PROSE
+
+
 def test_prose_records_its_position_in_the_group():
     r = parse(
         MINIMAL.replace("1. Mix.", "1. Mix.\n\nKeep going until it looks right and smooth."),

@@ -86,12 +86,17 @@ literal rule each one becomes an `<h3>` in the middle of a method.
 1. **Whitespace-only** → discard. Contributes nothing to any output.
 2. **Ends with `:`** (after stripping surrounding `**` emphasis) → **group label**. Strip the bold
    markers and the trailing colon for display.
-3. **Next non-blank line in the section is a list item, and the line is ≤ 60 characters and does not
-   end in `.`** → **group label**. This is the structural test: a real label introduces a list.
-4. **Otherwise** → **prose line** belonging to the current group. Rendered as a paragraph, never as
+3. **Starts with a quantity** (a digit or a vulgar fraction) → **prose**. Such a line is an
+   ingredient that lost its `- `, never a component name. Without this guard,
+   `1 cup all-purpose flour` in `bf_BacalaoCrepes` becomes a heading.
+4. **A list item appears within the next two non-blank lines, and the line is ≤ 60 characters and
+   does not end in `.`** → **group label**. This is the structural test: a real label introduces a
+   list. The lookahead is two rather than one because a label is sometimes separated from its list
+   by a yield note — `Tangerine Sauce`, then `Makes about 1 cup`, then the bullets.
+5. **Otherwise** → **prose line** belonging to the current group. Rendered as a paragraph, never as
    a heading, never silently dropped.
 
-**Measured result**: 408 group labels, 89 prose lines, 24 discarded. Spot-checking the 133 labels
+**Measured result**: 412 group labels, 104 prose lines, 24 discarded. Spot-checking the 133 labels
 that do not end in a colon confirms they are genuine component names — `Saffron Crepes`,
 `Pomegranate-Pecan Relish`, `The Crab Cakes`, `Assemble And Bake Quiche`.
 
