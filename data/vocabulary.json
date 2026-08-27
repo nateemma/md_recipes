@@ -1,0 +1,53 @@
+{
+  "authorVariants" : {
+    "Ottolenghi" : "Yotam Ottolenghi",
+    "Pastrey Living with Anya" : "Pastry Living with Anya"
+  },
+  "categories" : [
+    "Dinner",
+    "Dessert",
+    "Salad",
+    "Appetizer",
+    "Basics",
+    "Sides",
+    "Baking",
+    "Sauce",
+    "Brunch",
+    "Breakfast",
+    "Preserves",
+    "Soup",
+    "Lunch",
+    "Snacks",
+    "Tapas"
+  ],
+  "categoryVariants" : {
+    "Sauces" : "Sauce",
+    "SideS" : "Sides"
+  },
+  "cuisineVariants" : {
+
+  },
+  "cuisines" : [
+    "American",
+    "Asian",
+    "French",
+    "Spanish",
+    "Italian",
+    "Mexican",
+    "Middle Eastern",
+    "European",
+    "Mediterranean",
+    "Indian",
+    "Southwestern",
+    "African",
+    "British"
+  ],
+  "excludedCategories" : [
+    "American",
+    "Mexican",
+    "ToTry"
+  ],
+  "generatedBy" : "Tools/extract-vocabulary.swift",
+  "note" : "Do not edit by hand. Regenerate with `make vocab` in the RecipeScanner repo. `excludedCategories` are corpus values that must never be offered or emitted as a category: ToTry is a workflow state, Mexican and American are cuisine leaks.",
+  "source" : "the Pelican recipe corpus"
+}
