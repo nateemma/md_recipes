@@ -3,7 +3,7 @@ Summary: Uruguayan pie
 Date: 2025-03-22 15:30
 Slug: TortaDeFiambre
 Category: Brunch
-Cuisine: American
+Cuisine: Latin American
 Tags: cheese, ham, tart
 Authors: Thespruceeats
 Total_Time: 30 minutes

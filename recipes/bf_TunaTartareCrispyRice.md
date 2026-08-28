@@ -3,7 +3,7 @@ Summary: Peruvian Tartare & Crispy Rice
 Date: 2025-04-07 16:00
 Slug: bf_TunaTartareCrispyRice
 Category: Appetizer
-Cuisine: American
+Cuisine: Latin American
 Tags: tuna, rice
 Authors: Bobby Flay
 Total_Time: 45 minutes

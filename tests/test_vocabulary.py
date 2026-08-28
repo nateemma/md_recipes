@@ -14,9 +14,20 @@ VOCAB = Vocabulary.load(ROOT / "data" / "vocabulary.json")
 
 
 def test_vocabulary_shape():
+    """These two literals mirror the drift guard in RecipeScanner's
+    extract-vocabulary.swift. They are meant to be edited deliberately, on the
+    rare occasion a category or cuisine is genuinely added -- and in both places,
+    so the projects cannot disagree about the shape of the shared table."""
     assert len(VOCAB.categories) == 15
-    assert len(VOCAB.cuisines) == 13
+    assert len(VOCAB.cuisines) == 15
     assert "ToTry" in VOCAB.excluded_categories
+
+
+def test_the_new_regional_cuisines_are_present():
+    """Added because Jamaican, Argentine, Uruguayan and Peruvian dishes were
+    filed as American for want of anywhere better."""
+    assert "Caribbean" in VOCAB.cuisines
+    assert "Latin American" in VOCAB.cuisines
 
 
 def test_good_values_produce_no_violations():

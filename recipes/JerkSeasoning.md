@@ -3,7 +3,7 @@ Summary: Jamaican allspice, thyme and Scotch bonnet rub
 Date: 2026-08-28 18:35
 Slug: JerkSeasoning
 Category: Basics
-Cuisine: American
+Cuisine: Caribbean
 Tags: spice blend, allspice, scotch bonnet, caribbean
 Authors: Phil Price
 Total_Time: 15 minutes

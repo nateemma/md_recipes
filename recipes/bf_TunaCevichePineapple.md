@@ -3,7 +3,7 @@ Summary: Tuna ceviche al pastor!
 Date: 2025-04-04 16:00
 Slug: bf_TunaCevichePineapple
 Category: Appetizer
-Cuisine: American
+Cuisine: Latin American
 Tags: tuna, pineapple
 Authors: Bobby Flay
 Total_Time: 45 minutes

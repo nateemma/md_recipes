@@ -30,8 +30,12 @@ def test_envelope(index):
 
     assert index["count"] == len(index["recipes"])
     assert index["count"] == len(list(RECIPES.glob("*.md")))
-    assert len(index["categories"]) == 15
-    assert len(index["cuisines"]) == 13
+    from src.vocabulary import Vocabulary
+    from .conftest import ROOT
+
+    vocab = Vocabulary.load(ROOT / "data" / "vocabulary.json")
+    assert len(index["categories"]) == len(vocab.categories)
+    assert len(index["cuisines"]) == len(vocab.cuisines)
     assert index["categories"] == sorted(index["categories"])
 
 

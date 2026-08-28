@@ -23,8 +23,11 @@ VOCAB = Vocabulary.load(ROOT / "data" / "vocabulary.json")
 # corpus silently emptying.
 EXPECTED_COUNT = len(FILES)
 MINIMUM_COUNT = 200
-EXPECTED_CATEGORIES = 15
-EXPECTED_CUISINES = 13
+# Derived from the vocabulary, which is itself generated from this corpus by
+# RecipeScanner. Hardcoding the numbers here would mean editing two projects and
+# three test files every time a cuisine is added.
+EXPECTED_CATEGORIES = len(VOCAB.categories)
+EXPECTED_CUISINES = len(VOCAB.cuisines)
 
 
 def test_corpus_is_not_empty():
@@ -88,8 +91,12 @@ def test_distinct_category_count_is_unchanged_by_migration():
     assert len(categories) == EXPECTED_CATEGORIES
 
 
-def test_distinct_cuisine_count_is_unchanged():
-    assert len({parse_file(p).cuisine for p in FILES}) == EXPECTED_CUISINES
+def test_every_vocabulary_cuisine_is_actually_used():
+    """The vocabulary is generated from this corpus, so the two must agree
+    exactly -- a cuisine in the table that no recipe uses means they drifted."""
+    used = {parse_file(p).cuisine for p in FILES}
+    assert used == set(VOCAB.cuisines)
+    assert len(used) == EXPECTED_CUISINES
 
 
 def test_no_workflow_state_survives_as_a_category():

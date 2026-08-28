@@ -3,7 +3,7 @@ Summary: Argentine parsley, oregano, garlic and vinegar sauce for grilled beef
 Date: 2026-08-28 13:40
 Slug: Chimichurri
 Category: Sauce
-Cuisine: American
+Cuisine: Latin American
 Tags: parsley, oregano, garlic, no-cook, grilling
 Authors: Phil Price
 Total_Time: 15 minutes
