@@ -243,3 +243,27 @@ def test_welcome_sits_on_a_translucent_card():
     block = css[css.index(".welcome {") : css.index(".welcome h1")]
     assert "rgba(255, 255, 255, .5)" in block
     assert "backdrop-filter: blur" in block
+
+
+def test_assets_are_fingerprinted(site):
+    """GitHub Pages serves everything with max-age=600, which we do not control.
+    Without a content hash in the URL, a returning reader can get new HTML and a
+    ten-minute-old stylesheet -- new markup meeting old styles."""
+    import re
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert re.search(r"site\.css\?v=[0-9a-f]{10}", html)
+    assert re.search(r"search\.js\?v=[0-9a-f]{10}", html)
+    recipe = (site / "tk_WalnutSoup" / "index.html").read_text(encoding="utf-8")
+    assert re.search(r"site\.css\?v=[0-9a-f]{10}", recipe)
+
+
+def test_fingerprint_follows_the_content(tmp_path):
+    from src.render import asset_version
+
+    a = tmp_path / "a.css"
+    a.write_text("body{}", encoding="utf-8")
+    first = asset_version(a)
+    a.write_text("body{color:red}", encoding="utf-8")
+    assert asset_version(a) != first
+    assert len(first) == 10

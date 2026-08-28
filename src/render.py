@@ -6,6 +6,7 @@ source, only `Recipe` objects.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -88,6 +89,23 @@ def render_group(group: ComponentGroup, ordered: bool) -> Markup:
     return Markup("".join(parts))
 
 
+def asset_version(path: Path) -> str:
+    """A short content hash, appended to asset URLs as ?v=...
+
+    GitHub Pages serves everything with `cache-control: max-age=600`, which we do
+    not control. Without this, for up to ten minutes after a deploy a returning
+    reader can get the new HTML from one cache and the old stylesheet from
+    another -- new markup meeting old styles, which looks broken rather than
+    stale. Fingerprinting changes the asset's URL whenever its bytes change, so
+    the matching version is always fetched.
+
+    It cannot help the HTML itself; that cache is GitHub's to set.
+    """
+    if not path.exists():
+        return "0"
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:10]
+
+
 def make_env() -> Environment:
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATES)),
@@ -98,6 +116,9 @@ def make_env() -> Environment:
     env.globals["render_group"] = render_group
     env.globals["site_name"] = SITE_NAME
     env.globals["domain"] = DOMAIN
+    env.globals["css_v"] = asset_version(STATIC / "css" / "site.css")
+    env.globals["js_v"] = asset_version(STATIC / "js" / "search.js")
+    env.globals["img_v"] = asset_version(STATIC / "img" / "books.jpg")
     return env
 
 
