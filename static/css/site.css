@@ -161,6 +161,55 @@ a { color: var(--primary); }
 
 /* ---------- search ---------- */
 
+/* The cookbook shelf, behind the welcome and the search box.
+   Two fades, doing different jobs:
+   - a veil of the page background over the whole photo, so blue headings and
+     grey body text stay readable over a busy image;
+   - a mask that fades the band out at the bottom, so it dissolves into the page
+     instead of drawing a hard line above the first row of cards. */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  margin: -2rem 0 2rem;          /* cancel the header's bottom margin */
+  padding: 3rem 1rem 2rem;
+}
+
+/* Full-bleed: the band spans the viewport even though the text inside it stays
+   within the container, so there is no hard vertical edge beside the photo. */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
+.hero::before {
+  background-image: url("/static/img/books.jpg");
+  background-size: cover;
+  background-position: center 60%;
+  /* Fade out towards the bottom edge. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+}
+
+/* The veil. Sits between the photo and the text -- enough to keep the heading
+   and body text readable over a busy image, no more. */
+.hero::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(248, 249, 250, .55) 0%,
+    rgba(248, 249, 250, .66) 50%,
+    rgba(248, 249, 250, .95) 88%,
+    rgba(248, 249, 250, 1) 100%
+  );
+}
+
 .welcome {
   text-align: center;
   margin-bottom: 2rem;
@@ -168,23 +217,27 @@ a { color: var(--primary); }
 
 .welcome h1 {
   margin: 0 0 .75rem;
-  color: var(--primary);
+  color: var(--secondary);
   font-size: 2.5rem;
   line-height: 1.15;
+  /* A soft halo rather than a heavier veil: it lifts the text off the busier
+     spines without washing the photo out any further. */
+  text-shadow: 0 0 14px rgba(248, 249, 250, .95), 0 0 5px rgba(248, 249, 250, .9);
 }
 
 .welcome p {
   margin: 0 auto;
-  color: var(--muted);
+  color: #3f4753;
   max-width: 44rem;
+  text-shadow: 0 0 12px rgba(248, 249, 250, .95), 0 0 4px rgba(248, 249, 250, .95);
 }
 
 .search {
   max-width: var(--measure);
-  margin: 0 auto 1.25rem;
+  margin: 0 auto;
   background: var(--card);
   border-radius: var(--radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+  box-shadow: 0 4px 14px rgba(44, 62, 80, .16);
   padding: 1.5rem;
 }
 
@@ -287,6 +340,7 @@ a { color: var(--primary); }
   .recipe { padding: 1.25rem; }
   .recipe-header h1 { font-size: 1.5rem; }
   .welcome h1 { font-size: 1.85rem; }
+  .hero { padding: 1.5rem .75rem 1.25rem; margin-bottom: 1.5rem; }
   .results { grid-template-columns: 1fr; gap: .75rem; }
 }
 
@@ -318,6 +372,8 @@ a { color: var(--primary); }
 @media print {
   :root { --measure: 100%; }
 
+  .hero::before,
+  .hero::after,
   .site-header,
   .site-footer,
   .search,

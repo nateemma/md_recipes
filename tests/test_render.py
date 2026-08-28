@@ -187,3 +187,42 @@ def test_portrait_rule_does_not_disturb_print():
     """The print block must still win: it comes after the orientation rule."""
     css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
     assert css.index("@media (orientation: portrait)") < css.index("@media print")
+
+
+def test_hero_image_is_behind_the_welcome_and_search_only(site):
+    """The photo sits behind the welcome text and the search box, and stops
+    above the first row of cards."""
+    html = (site / "index.html").read_text(encoding="utf-8")
+    hero = html[html.index('class="hero"') : html.index('class="result-count"')]
+    assert 'class="welcome"' in hero
+    assert 'class="search"' in hero
+    assert 'class="results"' not in hero
+
+
+def test_hero_image_is_shipped_and_optimised(site):
+    img = site / "static" / "img" / "books.jpg"
+    assert img.exists()
+    size = img.stat().st_size
+    assert size < 500_000, f"hero image is {size} bytes; it should be optimised"
+
+
+def test_hero_image_carries_no_camera_metadata(site):
+    """It is a phone photo on a public site: no EXIF, no device, no timestamps."""
+    data = (site / "static" / "img" / "books.jpg").read_bytes()
+    assert b"Exif" not in data
+    assert b"iPhone" not in data
+    assert b"http://ns.adobe.com" not in data  # XMP
+
+
+def test_hero_is_faded_and_does_not_print():
+    css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
+    assert "books.jpg" in css
+    assert "mask-image" in css          # fades out at the bottom edge
+    assert ".hero::before" in css[css.index("@media print") :]  # not printed
+
+
+def test_recipe_pages_have_no_hero(site):
+    """The photo belongs to the search page only."""
+    assert "books.jpg" not in (site / "tk_WalnutSoup" / "index.html").read_text(
+        encoding="utf-8"
+    )

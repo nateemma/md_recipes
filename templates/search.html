@@ -2,6 +2,7 @@
 {% block title %}{{ site_name }}{% endblock %}
 
 {% block content %}
+<div class="hero">
 <section class="welcome">
   <h1>{{ site_name }}</h1>
   <p>{{ welcome }}</p>
@@ -42,6 +43,7 @@
     <button type="button" id="clear" class="clear">Clear</button>
   </div>
 </form>
+</div>
 
 <p class="result-count" id="count" aria-live="polite">{{ recipe_count }} recipes</p>
 
