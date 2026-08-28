@@ -234,7 +234,7 @@ def test_footer_does_not_carry_a_recipe_count(site):
     html = (site / "index.html").read_text(encoding="utf-8")
     footer = html[html.index('class="site-footer"') :]
     assert "recipes we actually cook" in footer
-    assert "208" not in footer
+    assert not re.search(r"\d+ recipes", footer)
 
 
 def test_welcome_sits_on_a_translucent_card():

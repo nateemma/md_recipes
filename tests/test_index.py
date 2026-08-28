@@ -26,8 +26,10 @@ REQUIRED = [
 
 
 def test_envelope(index):
+    from .conftest import RECIPES
+
     assert index["count"] == len(index["recipes"])
-    assert index["count"] == 208
+    assert index["count"] == len(list(RECIPES.glob("*.md")))
     assert len(index["categories"]) == 15
     assert len(index["cuisines"]) == 13
     assert index["categories"] == sorted(index["categories"])

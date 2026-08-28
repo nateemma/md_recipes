@@ -30,8 +30,10 @@ def extract(html):
 
 
 def test_every_page_carries_parseable_recipe_jsonld(site):
+    from .conftest import RECIPES
+
     pages = [p for p in site.rglob("index.html") if p.parent != site]
-    assert len(pages) == 208
+    assert len(pages) == len(list(RECIPES.glob("*.md")))
     for path in pages:
         data = extract(path.read_text(encoding="utf-8"))
         assert data["@context"] == "https://schema.org"
