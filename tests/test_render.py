@@ -226,3 +226,20 @@ def test_recipe_pages_have_no_hero(site):
     assert "books.jpg" not in (site / "tk_WalnutSoup" / "index.html").read_text(
         encoding="utf-8"
     )
+
+
+def test_footer_does_not_carry_a_recipe_count(site):
+    """It was accurate but read as a claim that would need revisiting; the
+    result count above the cards already reports the live number."""
+    html = (site / "index.html").read_text(encoding="utf-8")
+    footer = html[html.index('class="site-footer"') :]
+    assert "recipes we actually cook" in footer
+    assert "208" not in footer
+
+
+def test_welcome_sits_on_a_translucent_card():
+    """The photo shows through, but the text sits on an even ground."""
+    css = (ROOT / "static" / "css" / "site.css").read_text(encoding="utf-8")
+    block = css[css.index(".welcome {") : css.index(".welcome h1")]
+    assert "rgba(255, 255, 255, .5)" in block
+    assert "backdrop-filter: blur" in block

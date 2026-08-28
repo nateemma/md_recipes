@@ -27,12 +27,27 @@ python -m http.server 8000 --directory build
 
 ## Adding a recipe
 
-Drop a `.md` file into `recipes/` and push. The site rebuilds and deploys itself.
+**Drop a `.md` file into `recipes/` and push.** The site rebuilds and deploys itself — no index to
+update, no build to run by hand.
 
-The file format is **not ours to change** — it is the output format of
-[RecipeScanner](https://github.com/) , an iOS app with byte-level round-trip tests against this same
-corpus. Bare `Key: value` front matter with no `---` fences, then `# Title`, an optional headnote,
-`## Ingredients`, `## Instructions`, and `## Notes` only when it has content.
+```bash
+cp docs/recipe-template.md recipes/YourRecipeName.md
+# edit it, then
+git add recipes/YourRecipeName.md && git commit -m "Add Your Recipe Name" && git push
+```
+
+The build validates rather than corrects, so a mistake fails the build, names the file and the
+value, and publishes nothing — the live site is untouched until it is right. Run `make build`
+first if you'd rather not wait for CI to tell you.
+
+**See [docs/adding-a-recipe.md](docs/adding-a-recipe.md)** for the full rules: the ten front-matter
+keys and their order, the closed lists of 15 categories and 13 cuisines, component groups, and what
+each field is for.
+
+The file format is **not ours to change** — it is the output format of RecipeScanner, an iOS app
+with byte-level round-trip tests against this same corpus. Bare `Key: value` front matter with no
+`---` fences, then `# Title`, an optional headnote, `## Ingredients`, `## Instructions`, and
+`## Notes` only when it has content. A recipe exported from that app is already correct.
 
 ## Two rules worth knowing
 

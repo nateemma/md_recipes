@@ -8,3 +8,6 @@ __pycache__/
 *.swp
 .idea/
 .vscode/
+
+# The source photo for the hero; the optimised copy lives in static/img/
+books.jpeg
