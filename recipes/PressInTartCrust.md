@@ -2,7 +2,7 @@ Title: Ridiculously Easy Press-In Tart Crust (for Sweet or Savory Tarts)
 Summary: easy pie crust
 Date: 2025-03-22 15:30
 Slug: PressInTartCrust
-Category: Baking
+Category: Basics
 Cuisine: American
 Tags: crust, tart
 Authors: Thecafesucrefarine

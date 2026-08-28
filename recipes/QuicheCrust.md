@@ -2,7 +2,7 @@ Title: Quiche Crust / Shortcrust Pastry for Pies
 Summary: good crust for savoury pies/tarts
 Date: 2025-03-22 15:30
 Slug: QuicheCrust
-Category: Baking
+Category: Basics
 Cuisine: Italian
 Tags: crust, pastry
 Authors: Recipe Tin Eats
