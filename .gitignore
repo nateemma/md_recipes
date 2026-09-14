@@ -11,3 +11,7 @@ __pycache__/
 
 # The source photo for the hero; the optimised copy lives in static/img/
 books.jpeg
+
+# Staging area for recipes on their way in; only the README is tracked
+incoming/*
+!incoming/README.md

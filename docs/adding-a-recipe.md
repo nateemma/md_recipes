@@ -1,8 +1,28 @@
 # Adding a recipe
 
-**Short answer: yes, just drop a `.md` file into `recipes/` and push.** There is no index to
-update, no registry to edit and no build step to run by hand. GitHub Actions builds the site and
-deploys it, usually within a minute or two.
+**Short answer: yes, a `.md` file in `recipes/` is a recipe.** There is no index to update, no
+registry to edit and no build step to run by hand. GitHub Actions builds the site and deploys it,
+usually within a minute or two.
+
+## From RecipeScanner
+
+Share the export to `~/Downloads`, or drop it in `incoming/`, then:
+
+```bash
+make import      # shows what it found, validates it, copies nothing
+make import-go   # copies them into recipes/
+git add recipes/ && git commit -m "Add two recipes" && git push
+```
+
+`incoming/` is a staging area; everything in it except its README is git-ignored, so files left
+lying there are harmless. The import looks in both places.
+
+**Use the import rather than `cp`.** RecipeScanner's output passes validation either way, but `cp`
+will silently overwrite a recipe whose slug already exists, and it is gone unless git has it. The
+import refuses without `--replace`, and validates the whole corpus with the new files staged in
+before copying anything, so a bad file never reaches `recipes/`.
+
+## By hand
 
 ```bash
 cp docs/recipe-template.md recipes/YourRecipeName.md

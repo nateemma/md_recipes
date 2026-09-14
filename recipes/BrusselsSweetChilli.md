@@ -5,7 +5,7 @@ Slug: BrusselsSweetChilli
 Category: Sides
 Cuisine: Asian
 Tags: brussel sprouts, sweet chilli sauce
-Authors: Jean George von Richtigan
+Authors: Jean-Georges Vongerichten
 Total_Time: 20 minutes
 Servings: 4-6
 
