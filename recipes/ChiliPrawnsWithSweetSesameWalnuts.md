@@ -5,7 +5,7 @@ Slug: ChiliPrawnsWithSweetSesameWalnuts
 Category: Appetizer
 Cuisine: Asian
 Tags: shrimp, walnuts, stir-fry, chili, deep-fried
-Authors: 
+Authors: Jean-Georges Vongerichten
 Total_Time: 
 Servings: Makes 4 servings
 

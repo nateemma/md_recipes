@@ -5,7 +5,7 @@ Slug: ShrimpToastsWithWaterChestnuts
 Category: Appetizer
 Cuisine: Asian
 Tags: shrimp, water chestnuts, fried, appetizer, chinese-american
-Authors: 
+Authors: Jean-Georges Vongerichten
 Total_Time: 
 Servings: Makes 12 toasts
 

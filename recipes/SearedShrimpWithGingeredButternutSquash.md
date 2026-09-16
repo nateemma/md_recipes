@@ -5,7 +5,7 @@ Slug: SearedShrimpWithGingeredButternutSquash
 Category: Appetizer
 Cuisine: Asian
 Tags: shrimp, butternut squash, ginger, pumpkin seeds, seared, star anise
-Authors: 
+Authors: Jean-Georges Vongerichten
 Total_Time: 
 Servings: Makes 4 servings
 
